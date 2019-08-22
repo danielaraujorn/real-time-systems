@@ -5,16 +5,16 @@
 #include <signal.h>
 
 void printFormatFirst (int pid, int ppid, int seconds){
-    printf("pid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
+    printf("1. pid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
 }
 void printFormatSecond (int pid, int ppid, int seconds){
-    printf("\tpid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
+    printf("\t2. pid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
 }
 void printFormatThird (int pid, int ppid, int seconds){
-    printf("\t\tpid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
+    printf("\t\t3. pid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
 }
 void printFormatFourth (int pid, int ppid, int seconds){
-    printf("\t\t\tpid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
+    printf("\t\t\t4. pid %d, ppid %d, lifetime %d\n", pid, ppid, seconds);
 }
 
 int main()
