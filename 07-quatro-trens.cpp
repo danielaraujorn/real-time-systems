@@ -11,7 +11,6 @@
 // Programa que sincroniza threads utilizando-se mutexes
 // Para compilá-lo utilise: g++ -o threadTrem threadTrem.cpp -lpthread
 
-
 //   Os trens circulam em sentido horário entre os trilhos
 
 //   + - - - 1 - - - + - - - 2 - - - + - - - 3 - - - +
@@ -32,7 +31,6 @@
 //   |                                               |
 //   + - - - - - - - - - - - 13- - - - - - - - - - - +
 
-
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -40,30 +38,32 @@
 #include <semaphore.h>
 #include <string.h>
 
-pthread_mutex_t t5; /* proteção para o trilho 5 */
-pthread_mutex_t t6; /* proteção para o trilho 6 */
-pthread_mutex_t t8; /* proteção para o trilho 6 */
-pthread_mutex_t t9; /* proteção para o trilho 6 */
+pthread_mutex_t t5;  /* proteção para o trilho 5 */
+pthread_mutex_t t6;  /* proteção para o trilho 6 */
+pthread_mutex_t t8;  /* proteção para o trilho 6 */
+pthread_mutex_t t9;  /* proteção para o trilho 6 */
 pthread_mutex_t t10; /* proteção para o trilho 6 */
 
-void L(int trem,int trilho,int sleepTime){
-      printf("trem %d no trilho %d\n", trem, trilho);
-	  sleep(sleepTime);
+void L(int trem, int trilho, int sleepTime)
+{
+  printf("trem %d no trilho %d\n", trem, trilho);
+  sleep(sleepTime);
 }
 
 void *trem1(void *arg)
 {
   int trem = 1;
   int sleepTime = 1;
-  while(true){
-	L(trem, 1, sleepTime);
-	pthread_mutex_lock(&t5);
-	L(trem, 5, sleepTime);
-	pthread_mutex_unlock(&t5);
+  while (true)
+  {
+    L(trem, 1, sleepTime);
+    pthread_mutex_lock(&t5);
     pthread_mutex_lock(&t8);
-	L(trem, 8, sleepTime);
-	pthread_mutex_unlock(&t8);
-	L(trem, 4, sleepTime);
+    L(trem, 5, sleepTime);
+    pthread_mutex_unlock(&t5);
+    L(trem, 8, sleepTime);
+    pthread_mutex_unlock(&t8);
+    L(trem, 4, sleepTime);
   }
   pthread_exit(0);
 }
@@ -71,17 +71,18 @@ void *trem1(void *arg)
 void *trem2(void *arg)
 {
   int trem = 2;
-  int sleepTime = 1;
-  while(true){
-    pthread_mutex_lock(&t6);
-    pthread_mutex_lock(&t9);
-    pthread_mutex_lock(&t5);
+  int sleepTime = 2;
+  while (true)
+  {
     L(trem, 2, sleepTime);
+    pthread_mutex_lock(&t6);
     L(trem, 6, sleepTime);
-    L(trem, 9, sleepTime);
-    L(trem, 5, sleepTime);
     pthread_mutex_unlock(&t6);
+    pthread_mutex_lock(&t9);
+    L(trem, 9, sleepTime);
     pthread_mutex_unlock(&t9);
+    pthread_mutex_lock(&t5);
+    L(trem, 5, sleepTime);
     pthread_mutex_unlock(&t5);
   }
   pthread_exit(0);
@@ -90,16 +91,17 @@ void *trem2(void *arg)
 void *trem3(void *arg)
 {
   int trem = 3;
-  int sleepTime = 1;
-  while(true){
-      pthread_mutex_lock(&t10);
-	  L(trem, 10, sleepTime);
-	  pthread_mutex_unlock(&t10);
-	  pthread_mutex_lock(&t6);
-	  L(trem, 6, sleepTime);
-	  pthread_mutex_unlock(&t6);
-	  L(trem, 3, sleepTime);
-	  L(trem, 7, sleepTime);
+  int sleepTime = 4;
+  while (true)
+  {
+    L(trem, 3, sleepTime);
+    L(trem, 7, sleepTime);
+    pthread_mutex_lock(&t10);
+    pthread_mutex_lock(&t6);
+    L(trem, 10, sleepTime);
+    pthread_mutex_unlock(&t10);
+    L(trem, 6, sleepTime);
+    pthread_mutex_unlock(&t6);
   }
   pthread_exit(0);
 }
@@ -107,26 +109,28 @@ void *trem3(void *arg)
 void *trem4(void *arg)
 {
   int trem = 4;
-  int sleepTime = 1;
-  while(true){
-	  L(trem, 11, sleepTime);
-      pthread_mutex_lock(&t8);
-	  L(trem, 8, sleepTime);
-	  pthread_mutex_unlock(&t8);
-      pthread_mutex_lock(&t9);
-	  L(trem, 9, sleepTime);
-	  pthread_mutex_unlock(&t9);
-      pthread_mutex_lock(&t10);
-	  L(trem, 10, sleepTime);
-	  pthread_mutex_unlock(&t10);
-	  L(trem, 12, sleepTime);
-	  L(trem, 13, sleepTime);
+  int sleepTime = 8;
+  while (true)
+  {
+    L(trem, 13, sleepTime);
+    L(trem, 11, sleepTime);
+    pthread_mutex_lock(&t8);
+    L(trem, 8, sleepTime);
+    pthread_mutex_unlock(&t8);
+    pthread_mutex_lock(&t9);
+    L(trem, 9, sleepTime);
+    pthread_mutex_unlock(&t9);
+    pthread_mutex_lock(&t10);
+    L(trem, 10, sleepTime);
+    pthread_mutex_unlock(&t10);
+    L(trem, 12, sleepTime);
   }
   pthread_exit(0);
 }
 
 int main()
 {
+  srand(time(0));
   int res;
   pthread_t thread1, thread2, thread3, thread4;
 
