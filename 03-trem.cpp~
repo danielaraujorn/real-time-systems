@@ -1,9 +1,0 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <semaphore.h>
-#include <string.h>
-
-void *thread_function(void *arg);
-pthread_mutex_t work_mutex; /* proteção para: work_area e time_to_exit */
